@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.NameValuePair;
@@ -43,22 +44,34 @@ public class Main {
 		
 		
 		// YY y ZZ se corresponden con los valores de identificación del usuario en el sistema.
-		parametersList.add(new BasicNameValuePair("cmd", "sendsms"));
-		parametersList.add(new BasicNameValuePair("login", "noe.herrera@mobile-tic.com"));
-		parametersList.add(new BasicNameValuePair("passwd", "M7Tc9pXbZh3d"));
+//		parametersList.add(new BasicNameValuePair("cmd", "sendsms"));
+//		parametersList.add(new BasicNameValuePair("login", "noe.herrera@mobile-tic.com"));
+//		parametersList.add(new BasicNameValuePair("passwd", "M7Tc9pXbZh3d"));
 		
 		
-		// Array de números telefonicos
+		// Array de números telefonicos.
 		String[] numerosTelefonicos = new String[2];
 		
         numerosTelefonicos[0] = "573217048602";
         numerosTelefonicos[1] = "573103593237";
-//        numerosTelefonicos[2] = "573113873338";
-//        numerosTelefonicos[3] = "573116251502";
 
+        // Recorre el array de numerosTelefonicos
         for (int i = 0; i < numerosTelefonicos.length; i++) {
+        	String numero = numerosTelefonicos[i]; // En la variable numero guardamos cada número del array para validar posteriormente con el if.
+            String regex = "^[0-9]{12}$";  // en la variable regex le especificamos el formato que debe de tener.
+            
+            // Validamos si el formato de cada número cumple o no con el requisito de (12 numeros continuos sin letras).
+            if (!Pattern.matches(regex, numero)) {
+                System.out.println("Error: El número telefónico '" + numero + "' no cumple con el formato adecuado.");
+                continue;
+            }
+        	
+            parametersList.add(new BasicNameValuePair("cmd", "sendsms"));
+    		parametersList.add(new BasicNameValuePair("login", "noe.herrera@mobile-tic.com"));
+    		parametersList.add(new BasicNameValuePair("passwd", "M7Tc9pXbZh3d"));
             parametersList.add(new BasicNameValuePair("dest", numerosTelefonicos[i]));
-            parametersList.add(new BasicNameValuePair("msg", "Mensaje de prueba desde la API de Altiria"));
+            parametersList.add(new BasicNameValuePair("msg", "Mensaje de prueba desde la API de Altiria arrays"));
+            
             
             try {
     			// Se fija la codificacion de caracteres de la peticion POST
