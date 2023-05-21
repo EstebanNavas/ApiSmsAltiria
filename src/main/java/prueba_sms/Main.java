@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -42,11 +43,7 @@ public class Main {
 		// Se crea la lista de parámetros a enviar en la petición POST
 		List<NameValuePair> parametersList = new ArrayList<NameValuePair>();
 		
-		
-		// YY y ZZ se corresponden con los valores de identificación del usuario en el sistema.
-//		parametersList.add(new BasicNameValuePair("cmd", "sendsms"));
-//		parametersList.add(new BasicNameValuePair("login", "noe.herrera@mobile-tic.com"));
-//		parametersList.add(new BasicNameValuePair("passwd", "M7Tc9pXbZh3d"));
+
 		
 		
 		// Array de números telefonicos.
@@ -54,6 +51,73 @@ public class Main {
 		
         numerosTelefonicos[0] = "573217048602";
         numerosTelefonicos[1] = "573103593237";
+        
+		// Consulta de crédito disponible
+		parametersList.clear();
+		parametersList.add(new BasicNameValuePair("cmd", "getcredit")); // Comando para validar crédito disponible
+		parametersList.add(new BasicNameValuePair("login", "noe.herrera@mobile-tic.com"));
+		parametersList.add(new BasicNameValuePair("passwd", "M7Tc9pXbZh3d"));
+
+		try {
+			post.setEntity(new UrlEncodedFormEntity(parametersList, "UTF-8"));
+		} catch (UnsupportedEncodingException uex) {
+			System.out.println("ERROR: Codificación de caracteres no soportada");
+			return;
+		}
+
+		CloseableHttpResponse creditResponse = null;
+		double creditoDisponible = 0.0;
+
+		try {
+			System.out.println("Enviando petición de consulta de crédito");
+			creditResponse = httpClient.execute(post);
+			String resp = EntityUtils.toString(creditResponse.getEntity()); // Se utiliza la clase EntityUtils para convertir la entidad de la respuesta en  una cadena de texto.
+																	
+
+			if (creditResponse.getStatusLine().getStatusCode() != 200) {
+				System.out.println("ERROR: Código de error HTTP: " + creditResponse.getStatusLine().getStatusCode());
+				System.out.println(
+						"Compruebe que ha configurado correctamente la dirección/URL suministrada por Altiria");
+				return;
+			} else {
+				// Analizar la respuesta para obtener el crédito disponible
+//                creditoDisponible = Double.parseDouble(resp);
+				String regex = "credit\\(\\d+\\):(\\d+\\.\\d+)";
+				Pattern pattern = Pattern.compile(regex);
+				Matcher matcher = pattern.matcher(resp);
+				
+				if (matcher.find()) {
+					String creditString = matcher.group(1);
+					System.out.println("El crédito es : OK credit(" + creditString + "):");
+					creditoDisponible = Double.parseDouble(creditString);
+				} else {
+					System.out.println("ERROR: No se pudo obtener el crédito disponible de la respuesta");
+					return;
+				}
+			}
+		} catch (IOException ex) {
+			System.out.println("ERROR al enviar la petición: " + ex.getMessage());
+		} finally {
+			if (creditResponse != null) {
+				try {
+					creditResponse.close();
+				} catch (IOException ex) {
+					System.out.println("ERROR al cerrar la respuesta: " + ex.getMessage());
+				}
+			}
+		}
+
+		int totalMensajes = numerosTelefonicos.length; // Cantidad total de mensajes a enviar
+		int costoPorMensaje = 1; // Costo en créditos de cada mensaje
+		double creditosNecesarios = totalMensajes * costoPorMensaje;
+
+		// Verificar si hay crédito suficiente para enviar todos los mensajes
+		if (creditoDisponible < creditosNecesarios) {
+			System.out.println("Error: No hay suficiente crédito disponible para enviar todos los mensajes.");
+			return;
+
+		}
+        
 
         // Recorre el array de numerosTelefonicos
         for (int i = 0; i < numerosTelefonicos.length; i++) {
@@ -72,7 +136,7 @@ public class Main {
     		parametersList.add(new BasicNameValuePair("login", "noe.herrera@mobile-tic.com"));
     		parametersList.add(new BasicNameValuePair("passwd", "M7Tc9pXbZh3d"));
             parametersList.add(new BasicNameValuePair("dest", numerosTelefonicos[i]));
-            parametersList.add(new BasicNameValuePair("msg", "Mensaje de prueba desde la API de Altiria arrays"));
+            parametersList.add(new BasicNameValuePair("msg", "Mensaje de prueba desde la API de Altiria consulta credito"));
             
             
             try {
