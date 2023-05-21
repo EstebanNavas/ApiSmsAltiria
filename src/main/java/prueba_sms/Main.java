@@ -65,6 +65,8 @@ public class Main {
                 System.out.println("Error: El número telefónico '" + numero + "' no cumple con el formato adecuado.");
                 continue;
             }
+            
+            parametersList.clear();// Limpiamos la lista de parámetros antes de agregar los nuevos
         	
             parametersList.add(new BasicNameValuePair("cmd", "sendsms"));
     		parametersList.add(new BasicNameValuePair("login", "noe.herrera@mobile-tic.com"));
