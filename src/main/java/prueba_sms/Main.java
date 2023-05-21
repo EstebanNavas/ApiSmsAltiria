@@ -47,10 +47,44 @@ public class Main {
 		
 		
 		// Array de números telefonicos.
-		String[] numerosTelefonicos = new String[2];
+		String[] numerosTelefonicos = new String[34];
 		
-        numerosTelefonicos[0] = "573217048602";
-        numerosTelefonicos[1] = "573103593237";
+		numerosTelefonicos[0] = "573217048602";
+		numerosTelefonicos[1] = "573103593237";
+		numerosTelefonicos[2] = "573217048602";
+		numerosTelefonicos[3] = "573103593237";
+		numerosTelefonicos[4] = "573217048602";
+		numerosTelefonicos[5] = "573103593237";
+		numerosTelefonicos[6] = "573217048602";
+		numerosTelefonicos[7] = "573103593237";
+		numerosTelefonicos[8] = "573217048602";
+		numerosTelefonicos[9] = "573103593237";
+		numerosTelefonicos[10] = "573217048602";
+		numerosTelefonicos[11] = "573103593237";
+		numerosTelefonicos[12] = "573217048602";
+		numerosTelefonicos[13] = "573103593237";
+		numerosTelefonicos[14] = "573217048602";
+		numerosTelefonicos[15] = "573103593237";
+		numerosTelefonicos[16] = "573217048602";
+		numerosTelefonicos[17] = "573103593237";
+		numerosTelefonicos[18] = "573217048602";
+		numerosTelefonicos[19] = "573103593237";
+		numerosTelefonicos[20] = "573217048602";
+		numerosTelefonicos[21] = "573103593237";
+		numerosTelefonicos[22] = "573217048602";
+		numerosTelefonicos[23] = "573103593237";
+		numerosTelefonicos[24] = "573217048602";
+		numerosTelefonicos[25] = "573103593237";
+		numerosTelefonicos[26] = "573217048602";
+		numerosTelefonicos[27] = "573103593237";
+		numerosTelefonicos[28] = "573217048602";
+		numerosTelefonicos[29] = "573103593237";
+		numerosTelefonicos[30] = "573217048602";
+		numerosTelefonicos[31] = "573103593237";
+		numerosTelefonicos[32] = "573217048602";
+		numerosTelefonicos[33] = "573103593237";
+
+
         
 		// Consulta de crédito disponible
 		parametersList.clear();
