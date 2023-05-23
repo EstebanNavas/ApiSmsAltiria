@@ -1,11 +1,4 @@
 package prueba_sms;
-//Copyright (c) 2018, Altiria TIC SL
-
-//All rights reserved.
-//El uso de este código de ejemplo es solamente para mostrar el uso de la pasarela de envío de SMS de Altiria
-//Para un uso personalizado del código, es necesario consultar la API de especificaciones técnicas, donde también podrás encontrar
-//más ejemplos de programación en otros lenguajes de programación y otros protocolos (http, REST, web services)
-//https://www.altiria.com/api-envio-sms/
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -15,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -24,7 +18,21 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-public class Main {
+
+public class sms_conURL {
+	
+	  private static String getWebMobileLink(int webId) {
+	        // Reemplaza el valor de "YOUR_WEB_ID" con el identificador de tu web móvil
+	        return "http://go2.re/" + generateUniqueCode(webId);
+	    }
+
+	    private static String generateUniqueCode(int webId) {
+	    	   // Utilizando algoritmo de generación de hash (SHA-256)
+	        String code = DigestUtils.sha256Hex(Integer.toString(webId));
+	        // Tomando los primeros 7 caracteres del hash generado
+	        return code.substring(0, 7);
+	    }
+
 
 	public static void main(String[] args) {
 		
@@ -50,6 +58,11 @@ public class Main {
 		String[] numerosTelefonicos = new String[1];
 		
 		numerosTelefonicos[0] = "573217048602";
+//		numerosTelefonicos[1] = "573103593237";
+		
+		String mensaje = "Estimado cliente, acceda a la promoción en el siguiente enlace: {$15880$}";
+		
+		mensaje = mensaje.replace("{$15880$}", getWebMobileLink(9355));
 		
 
         
@@ -137,8 +150,9 @@ public class Main {
     		parametersList.add(new BasicNameValuePair("login", "noe.herrera@mobile-tic.com"));
     		parametersList.add(new BasicNameValuePair("passwd", "M7Tc9pXbZh3d"));
             parametersList.add(new BasicNameValuePair("dest", numerosTelefonicos[i]));
-            parametersList.add(new BasicNameValuePair("msg", "Mensaje de prueba desde la API de Altiria, prueba link"));
+            parametersList.add(new BasicNameValuePair("msg", mensaje));
             
+            System.out.println("El mensaje es: "+ mensaje);
             
             try {
     			// Se fija la codificacion de caracteres de la peticion POST
@@ -192,4 +206,5 @@ public class Main {
 
 		
 	}
+	
 }
