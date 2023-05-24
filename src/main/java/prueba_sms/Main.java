@@ -50,7 +50,9 @@ public class Main {
 		String[] numerosTelefonicos = new String[1];
 		
 		numerosTelefonicos[0] = "573217048602";
-		
+	
+	
+
 
         
 		// Consulta de crédito disponible
@@ -82,7 +84,7 @@ public class Main {
 				return;
 			} else {
 				// Analizar la respuesta para obtener el crédito disponible
-//                creditoDisponible = Double.parseDouble(resp);
+//                
 				String regex = "credit\\(\\d+\\):(\\d+\\.\\d+)";
 				Pattern pattern = Pattern.compile(regex);
 				Matcher matcher = pattern.matcher(resp);

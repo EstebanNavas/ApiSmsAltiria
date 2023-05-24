@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.commons.codec.digest.DigestUtils;
+//import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -21,20 +21,11 @@ import org.apache.http.util.EntityUtils;
 
 public class sms_conURL {
 	
-	  private static String getWebMobileLink(int webId) {
-	        // Reemplaza el valor de "YOUR_WEB_ID" con el identificador de tu web móvil
-	        return "http://go2.re/" + generateUniqueCode(webId);
-	    }
+	
 
-	    private static String generateUniqueCode(int webId) {
-	    	   // Utilizando algoritmo de generación de hash (SHA-256)
-	        String code = DigestUtils.sha256Hex(Integer.toString(webId));
-	        // Tomando los primeros 7 caracteres del hash generado
-	        return code.substring(0, 7);
-	    }
-
-
+	    
 	public static void main(String[] args) {
+		
 		
 		// Se fija el tiempo máximo de espera para conectar con el servidor (5000)
 		// Se fija el tiempo máximo de espera de la respuesta del servidor (60000)
@@ -57,13 +48,12 @@ public class sms_conURL {
 		// Array de números telefonicos.
 		String[] numerosTelefonicos = new String[1];
 		
-		numerosTelefonicos[0] = "573217048602";
-//		numerosTelefonicos[1] = "573103593237";
+		numerosTelefonicos[0] = "573113873338";
+//		numerosTelefonicos[1] = "573217048602";
+//		numerosTelefonicos[2] = "573187945852";
 		
-		String mensaje = "Estimado cliente, acceda a la promoción en el siguiente enlace: {$15880$}";
-		
-		mensaje = mensaje.replace("{$15880$}", getWebMobileLink(9355));
-		
+	
+	
 
         
 		// Consulta de crédito disponible
@@ -73,6 +63,7 @@ public class sms_conURL {
 		parametersList.add(new BasicNameValuePair("passwd", "M7Tc9pXbZh3d"));
 
 		try {
+			//Se configura la entidad de la solicitud POST utilizando el método setEntity(). Se crea una instancia de UrlEncodedFormEntity pasando la lista de parámetros parametersList
 			post.setEntity(new UrlEncodedFormEntity(parametersList, "UTF-8"));
 		} catch (UnsupportedEncodingException uex) {
 			System.out.println("ERROR: Codificación de caracteres no soportada");
@@ -98,10 +89,10 @@ public class sms_conURL {
 //                creditoDisponible = Double.parseDouble(resp);
 				String regex = "credit\\(\\d+\\):(\\d+\\.\\d+)";
 				Pattern pattern = Pattern.compile(regex);
-				Matcher matcher = pattern.matcher(resp);
+				Matcher matcher1 = pattern.matcher(resp);
 				
-				if (matcher.find()) {
-					String creditString = matcher.group(1);
+				if (matcher1.find()) {
+					String creditString = matcher1.group(1);
 					System.out.println("El crédito es : OK credit(" + creditString + "):");
 					creditoDisponible = Double.parseDouble(creditString);
 				} else {
@@ -131,7 +122,8 @@ public class sms_conURL {
 			return;
 
 		}
-        
+		
+		
 
         // Recorre el array de numerosTelefonicos
         for (int i = 0; i < numerosTelefonicos.length; i++) {
@@ -150,9 +142,11 @@ public class sms_conURL {
     		parametersList.add(new BasicNameValuePair("login", "noe.herrera@mobile-tic.com"));
     		parametersList.add(new BasicNameValuePair("passwd", "M7Tc9pXbZh3d"));
             parametersList.add(new BasicNameValuePair("dest", numerosTelefonicos[i]));
-            parametersList.add(new BasicNameValuePair("msg", mensaje));
+            parametersList.add(new BasicNameValuePair("msg", "Estimado cliente acceda a la promoción en el siguiente link: {$9355$} "));
+            parametersList.add(new BasicNameValuePair("landing", "1"));
+            parametersList.add(new BasicNameValuePair("params", "0"));
             
-            System.out.println("El mensaje es: "+ mensaje);
+           
             
             try {
     			// Se fija la codificacion de caracteres de la peticion POST
