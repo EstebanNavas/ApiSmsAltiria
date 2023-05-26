@@ -48,7 +48,7 @@ public class sms_conURL {
 		// Array de números telefonicos.
 		String[] numerosTelefonicos = new String[1];
 		
-		numerosTelefonicos[0] = "573113873338";
+		numerosTelefonicos[0] = "573103593237";
 //		numerosTelefonicos[1] = "573217048602";
 //		numerosTelefonicos[2] = "573187945852";
 		
