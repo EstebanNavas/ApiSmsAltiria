@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class bdaquamovil {
 
@@ -92,7 +94,9 @@ public class bdaquamovil {
     	}
     	
     	                                            // EXTRAER NÚMEROS DE TELEFONO CELULAR
-    	private static void consultarTelefonoCelular(Connection connection, int idLocal) throws SQLException{
+    	
+    	// Creamos el metodo consultarTelefonoCelular se tipo String[] donde guardaremos en un array los números telegfonicos obtenidos 
+    	public static String[] consultarTelefonoCelular(Connection connection, int idLocal) throws SQLException{
     		
     		// Ejecutamos una consulta parametrizada. Los signos de interrogación (?) se utilizan como marcadores de posición para los parámetros.
             String queryTelefonoCelular = "SELECT * FROM bdaquamovil.dbo.tblTerceros WHERE idLocal = ? AND ISNUMERIC([telefonoCelular]) = 1 AND LEN([telefonoCelular]) = 10";
@@ -104,6 +108,8 @@ public class bdaquamovil {
          // Se ejecuta la consulta utilizando el método executeQuery() del objeto PreparedStatement y se guarda el resultado en el objeto ResultSet.
             ResultSet resultSet = statement.executeQuery();
             
+            List<String> numerosCelular = new ArrayList<String>();
+            
             // Recorremos los resultados de la consulta usando el método next() para recorrer fila por fila los registros obtenidos en la consulta
             while (resultSet.next()) {
             	
@@ -111,14 +117,21 @@ public class bdaquamovil {
                 int idLocales = resultSet.getInt("IDLOCAL");
                 long telefonoCelular = resultSet.getLong("telefonoCelular");
                 
-
+                //Le asignamos el prefijo 57 a cada numero para que posteriormente pueda se usado en el IF de validacion de formato de numero celular (12 números)
+                String numeroCelularConPrefijo = "57" + telefonoCelular;
                 // Mostramos los valores por consola
-                System.out.println("Query 3 - IDlocal: " + idLocales + "  telefonoCelular: " + telefonoCelular );
+                System.out.println("Query 3 - IDlocal: " + idLocales + "  telefonoCelular: " + numeroCelularConPrefijo );
+                
+                numerosCelular.add(String.valueOf(numeroCelularConPrefijo));
             }
 
             // Cerramos los recursos utilizados para la consulta
             resultSet.close();
             statement.close();
+            
+            System.out.println("numerosCelular :" + numerosCelular );
+            
+            return numerosCelular.toArray(new String[0]);
     	}
 }// FIN DBAQUAMOVIL
 

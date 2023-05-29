@@ -9,6 +9,8 @@ package prueba_sms;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -27,6 +29,26 @@ import org.apache.http.util.EntityUtils;
 public class Main {
 
 	public static void main(String[] args) {
+		
+		//Obtenemos la conexion a la base de datos
+	     Connection connection = conexionSQL.getConexion();
+	     
+	     String[] numerosCelular =null;
+	        try {
+	            numerosCelular = bdaquamovil.consultarTelefonoCelular(connection, 100);
+//	            for (String numero : numerosCelular) {
+//	                System.out.println("EL numero traido a main es :" + numero);
+//	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                connection.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+		
 		
 		// Se fija el tiempo máximo de espera para conectar con el servidor (5000)
 		// Se fija el tiempo máximo de espera de la respuesta del servidor (60000)
@@ -47,9 +69,9 @@ public class Main {
 		
 		
 		// Array de números telefonicos.
-		String[] numerosTelefonicos = new String[1];
-		
-		numerosTelefonicos[0] = "573217048602";
+//		String[] numerosTelefonicos = new String[1];
+//		
+//		numerosTelefonicos[0] = "573217048602";
 	
 	
 
@@ -110,7 +132,7 @@ public class Main {
 			}
 		}
 
-		int totalMensajes = numerosTelefonicos.length; // Cantidad total de mensajes a enviar
+		int totalMensajes = numerosCelular.length; // Cantidad total de mensajes a enviar
 		int costoPorMensaje = 1; // Costo en créditos de cada mensaje
 		double creditosNecesarios = totalMensajes * costoPorMensaje;
 
@@ -123,8 +145,8 @@ public class Main {
         
 
         // Recorre el array de numerosTelefonicos
-        for (int i = 0; i < numerosTelefonicos.length; i++) {
-        	String numero = numerosTelefonicos[i]; // En la variable numero guardamos cada número del array para validar posteriormente con el if.
+        for (int i = 0; i < numerosCelular.length; i++) {
+        	String numero = numerosCelular[i]; // En la variable numero guardamos cada número del array para validar posteriormente con el if.
             String regex = "^[0-9]{12}$";  // en la variable regex le especificamos el formato que debe de tener.
             
             // Validamos si el formato de cada número cumple o no con el requisito de (12 numeros continuos sin letras).
@@ -138,8 +160,8 @@ public class Main {
             parametersList.add(new BasicNameValuePair("cmd", "sendsms"));
     		parametersList.add(new BasicNameValuePair("login", "noe.herrera@mobile-tic.com"));
     		parametersList.add(new BasicNameValuePair("passwd", "M7Tc9pXbZh3d"));
-            parametersList.add(new BasicNameValuePair("dest", numerosTelefonicos[i]));
-            parametersList.add(new BasicNameValuePair("msg", "Mensaje de prueba desde la API de Altiria, prueba link"));
+            parametersList.add(new BasicNameValuePair("dest", numerosCelular[i]));
+            parametersList.add(new BasicNameValuePair("msg", "Mensaje de prueba DB"));
             
             
             try {
