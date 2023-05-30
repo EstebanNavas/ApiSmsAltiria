@@ -7,58 +7,120 @@ import java.sql.SQLException;
 import java.sql.Statement;    //pool de conexiones jdbc
 
 public class BDMailMarketing {
-	
     public static void main(String[] args) {
-    	
-    	//Obtenemos la conexión a la base de datos
+        // Obtenemos la conexión a la base de datos
         Connection connection = conexionSQLMailMarketing.getConexionMailMarketing();
-        
-        // Verificamos si la coenxion es éxitosa o no 
+
+        // Verificamos si la conexión es exitosa o no
         if (connection != null) {
             try {
-              
-
-                // Ejecutamos una consulta parametrizada. . Los signos de interrogación (?) se utilizan como marcadores de posición para los parámetros.
-                String query = "SELECT * FROM tblMailCampaign WHERE idlocal = ? AND sistema = ? AND idCampaign = ?";
-                PreparedStatement statement = connection.prepareStatement(query);
+                // Llamamos al método consultarTextoSMS
+                consultarTextoSMS(connection, 100);
                 
-             // Asignamos los valores de los parámetros en la consulta
-                statement.setInt(1, 100); //idlocal
-                statement.setString(2, "aquamovil");  //sistema
-                statement.setInt(3, 18); //idCampaign
-                
-                		                              
-              //Se ejecuta la consulta utilizando el método executeQuery() del objeto PreparedStatement y se guarda el resultado en el objeto ResultSet.  
-                ResultSet resultSet = statement.executeQuery();
-
-     
+                consultarFechayHora(connection, 100);
                 
                 
-                // Recorremos los resultados de la consulta usando el metodo next() para recorrer fila por fila los registros obtenidos en la consulta
-                while (resultSet.next()) {
-                	
-                    //  Utilizamos los métodos getInt() y getString() del ResultSet para obtener los valores de cada columna en el registro actual
-                    int idLocal = resultSet.getInt("IDLOCAL");                   
-                    String NombreCampaign = resultSet.getString("NombreCampaign");
-                    String sistema = resultSet.getString("sistema");
-                    int idCampaign = resultSet.getInt("idCampaign");
-                    String textoSMS = resultSet.getString("textoSMS");
-                    
-
-                    // Mostramos los valores por consola
-                      System.out.println("IDlocal: " + idLocal + "  NombreCampaign " + NombreCampaign + " sistema " + sistema + " idCampaign " + idCampaign + " textoSMS " + textoSMS);                    
-                }
-
-                // Se cierran los recursos utilizados para la conexión y consulta a la base de datos
-                resultSet.close();
-                statement.close();
+                // Se cierra la conexión a la base de datos
                 connection.close();
-                
-                //En caso de que ocurra una excepción durante el cierre de los recursos, se captura la excepción SQLException y se imprime la traza de la excepción utilizando el método printStackTrace()
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
+
+                                             // EXTRAEMOS LA RAZON SOCIAL DEL LOCAL
+    public static String consultarTextoSMS(Connection connection, int idLocal) throws SQLException {
+        String textoSMS = "";
+
+        // Ejecutamos una consulta parametrizada
+        String queryTextoSMS = "SELECT * FROM tblMailCampaign WHERE idlocal = ? AND sistema = ? AND idCampaign = ?";
+        PreparedStatement statement = connection.prepareStatement(queryTextoSMS);
+
+        // Asignamos los valores de los parámetros en la consulta
+        statement.setInt(1, 100); // idlocal
+        statement.setString(2, "aquamovil"); // sistema
+        statement.setInt(3, 18); // idCampaign
+
+        // Ejecutamos la consulta y obtenemos el resultado
+        ResultSet resultSet = statement.executeQuery();
+
+        // Recorremos los resultados de la consulta
+        while (resultSet.next()) {
+            // Obtenemos los valores de cada columna en el registro actual
+            int idLocales = resultSet.getInt("IDLOCAL");
+            String NombreCampaign = resultSet.getString("NombreCampaign");
+            String sistema = resultSet.getString("sistema");
+            int idCampaign = resultSet.getInt("idCampaign");
+            textoSMS = resultSet.getString("textoSMS");
+
+            // Mostramos los valores por consola
+            System.out.println("IDlocal: " + idLocales + " NombreCampaign: " + NombreCampaign + " sistema: " + sistema
+                    + " idCampaign: " + idCampaign + " textoSMS: " + textoSMS);
+        }
+
+        // Cerramos los recursos utilizados
+        resultSet.close();
+        statement.close();
+        
+
+        // Retornamos el texto del SMS
+        return textoSMS;
+    }
+    
+                                                 // EXTRAEMOS LA FECHA Y HORA QUE ESTÁ PROGRAMADO EL ENVIO DEL SMS
+    
+    public static String consultarFechayHora(Connection connection, int idLocal)throws SQLException  {
+    	String fechayHora = "";
+    	
+    	// Ejecutamos una consulta parametrizada
+        String queryFechayHora = "SELECT * FROM tblMailCampaign WHERE idlocal = ? AND sistema = ? AND idCampaign = ?";
+        PreparedStatement statement = connection.prepareStatement(queryFechayHora);
+    	
+        // Asignamos los valores de los parámetros en la consulta
+        statement.setInt(1, 100); // idlocal
+        statement.setString(2, "aquamovil"); // sistema
+        statement.setInt(3, 18); // idCampaign
+    	
+        // Ejecutamos la consulta y obtenemos el resultado
+        ResultSet resultSet = statement.executeQuery();
+        
+     // Recorremos los resultados de la consulta
+        while (resultSet.next()) {
+            // Obtenemos los valores de cada columna en el registro actual
+            int idLocales = resultSet.getInt("IDLOCAL");
+            String NombreCampaign = resultSet.getString("NombreCampaign");
+            String sistema = resultSet.getString("sistema");
+            int idCampaign = resultSet.getInt("idCampaign");
+            fechayHora = resultSet.getString("fecha/hora");
+            
+
+            // Mostramos los valores por consola
+            System.out.println("IDlocal: " + idLocales + " NombreCampaign: " + NombreCampaign + " sistema: " + sistema
+                    + " idCampaign: " + idCampaign + " Fecha/Hora: " + fechayHora);
+        }
+
+        // Cerramos los recursos utilizados
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        // Retornamos el texto del SMS
+        
+		return fechayHora;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

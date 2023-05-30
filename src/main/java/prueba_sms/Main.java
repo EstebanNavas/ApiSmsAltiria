@@ -30,15 +30,16 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		//Obtenemos la conexion a la base de datos
+		//Obtenemos la conexion a la base de datos dbaquamovil
 	     Connection connection =  conexionSQLaquamovil.getConexionAquamovil();
 	     
 	     String[] numerosCelular =null;
+//	     String razonSocial= "";
+	     
 	        try {
 	            numerosCelular = bdaquamovil.consultarTelefonoCelular(connection, 100);
-//	            for (String numero : numerosCelular) {
-//	                System.out.println("EL numero traido a main es :" + numero);
-//	            }
+//	            razonSocial = bdaquamovil.consultarRazonSocial(connection, 100);
+
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        } finally {

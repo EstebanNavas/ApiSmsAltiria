@@ -18,7 +18,7 @@ public class bdaquamovil {
             try {
             	
             	//Llamamos a los metodos
-                consultarLocalesPorId(connection, 100);
+            	consultarRazonSocial(connection, 100);
                 
                 consultarPeriodoFechaPago(connection, 100, 202304);
                 
@@ -33,7 +33,9 @@ public class bdaquamovil {
     }// FIN MAIN
 
                                              // EXTRAER EL ID DEL LOCAL Y SU RAZÓN SOCIAL 
-    private static void consultarLocalesPorId(Connection connection, int idLocal) throws SQLException {
+    public static String consultarRazonSocial(Connection connection, int idLocal) throws SQLException {
+    	
+    	String razonSocial = "";
     	
         // Ejecutamos una consulta parametrizada. Los signos de interrogación (?) se utilizan como marcadores de posición para los parámetros.
         String queryRazonSocial = "SELECT * FROM tblLocales WHERE idLocal = ?";
@@ -50,7 +52,7 @@ public class bdaquamovil {
         	
             // Utilizamos los métodos getInt() y getString() del ResultSet para obtener los valores de cada columna en el registro actual
             int idLocales = resultSet.getInt("IDLOCAL");
-            String razonSocial = resultSet.getString("razonSocial");
+            razonSocial = resultSet.getString("razonSocial");
 
             // Mostramos los valores por consola
             System.out.println("Query 1 - IDlocal: " + idLocales + "  razonSocial: " + razonSocial);
@@ -59,13 +61,15 @@ public class bdaquamovil {
         // Cerramos los recursos utilizados para la consulta
         resultSet.close();
         statement.close();
+        
+		return razonSocial;
     }
     
                                         // EXTRAER ULTIMO PERIODO Y FECHA DE PAGO DEL LOCAL 
-    	private static void consultarPeriodoFechaPago(Connection connection, int idLocal, int idPeriodo ) throws SQLException{
+    	public static void consultarPeriodoFechaPago(Connection connection, int idLocal, int idPeriodo ) throws SQLException{
     		
     		// Ejecutamos una consulta parametrizada. Los signos de interrogación (?) se utilizan como marcadores de posición para los parámetros.
-            String queryPeriodoFechaPago = "SELECT * FROM bdaquamovil.dbo.tblDctosPeriodo WHERE idLocal = ? AND idPeriodo = ?";
+            String queryPeriodoFechaPago = "SELECT * FROM tblDctosPeriodo WHERE idLocal = ? AND idPeriodo = ?";
             PreparedStatement statement = connection.prepareStatement(queryPeriodoFechaPago);
             
          // Asignamos los valores de los parámetros en la consulta
@@ -99,7 +103,7 @@ public class bdaquamovil {
     	public static String[] consultarTelefonoCelular(Connection connection, int idLocal) throws SQLException{
     		
     		// Ejecutamos una consulta parametrizada. Los signos de interrogación (?) se utilizan como marcadores de posición para los parámetros.
-            String queryTelefonoCelular = "SELECT * FROM bdaquamovil.dbo.tblTerceros WHERE idLocal = ? AND ISNUMERIC([telefonoCelular]) = 1 AND LEN([telefonoCelular]) = 10";
+            String queryTelefonoCelular = "SELECT * FROM tblTerceros WHERE idLocal = ? AND ISNUMERIC([telefonoCelular]) = 1 AND LEN([telefonoCelular]) = 10";
             PreparedStatement statement = connection.prepareStatement(queryTelefonoCelular);
             
          // Asignamos los valores de los parámetros en la consulta
