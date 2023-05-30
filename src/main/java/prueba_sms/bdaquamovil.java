@@ -11,7 +11,7 @@ public class bdaquamovil {
 
     public static void main(String[] args) {
         // Obtenemos la conexión a la base de datos
-        Connection connection = conexionSQL.getConexion();
+        Connection connection = conexionSQLaquamovil.getConexionAquamovil();
 
         // Verificamos si la conexión es exitosa o no
         if (connection != null) {
@@ -36,7 +36,7 @@ public class bdaquamovil {
     private static void consultarLocalesPorId(Connection connection, int idLocal) throws SQLException {
     	
         // Ejecutamos una consulta parametrizada. Los signos de interrogación (?) se utilizan como marcadores de posición para los parámetros.
-        String queryRazonSocial = "SELECT * FROM bdaquamovil.dbo.tblLocales WHERE idLocal = ?";
+        String queryRazonSocial = "SELECT * FROM tblLocales WHERE idLocal = ?";
         PreparedStatement statement = connection.prepareStatement(queryRazonSocial);
 
         // Asignamos los valores de los parámetros en la consulta

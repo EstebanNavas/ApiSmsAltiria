@@ -11,7 +11,7 @@ public class BDMailMarketing {
     public static void main(String[] args) {
     	
     	//Obtenemos la conexión a la base de datos
-        Connection connection = conexionSQL.getConexion();
+        Connection connection = conexionSQLMailMarketing.getConexionMailMarketing();
         
         // Verificamos si la coenxion es éxitosa o no 
         if (connection != null) {
@@ -19,7 +19,7 @@ public class BDMailMarketing {
               
 
                 // Ejecutamos una consulta parametrizada. . Los signos de interrogación (?) se utilizan como marcadores de posición para los parámetros.
-                String query = "SELECT * FROM BDMailMarketing.dbo.tblMailCampaign WHERE idlocal = ? AND sistema = ? AND idCampaign = ?";
+                String query = "SELECT * FROM tblMailCampaign WHERE idlocal = ? AND sistema = ? AND idCampaign = ?";
                 PreparedStatement statement = connection.prepareStatement(query);
                 
              // Asignamos los valores de los parámetros en la consulta

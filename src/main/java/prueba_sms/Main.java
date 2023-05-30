@@ -31,7 +31,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		//Obtenemos la conexion a la base de datos
-	     Connection connection = conexionSQL.getConexion();
+	     Connection connection =  conexionSQLaquamovil.getConexionAquamovil();
 	     
 	     String[] numerosCelular =null;
 	        try {

@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class conexionSQL {
+public class conexionSQLMailMarketing {
 	
-	public static Connection getConexion() {
+	public static Connection getConexionMailMarketing() {
 		
 		String conexionUrl = "jdbc:sqlserver://localhost:1434;"
 				+ "database=BDMailMarketing;"
