@@ -149,19 +149,16 @@ public class bdaquamovil {
                 int idLocales = resultSet.getInt("IDLOCAL");
                 int idPeriodos = resultSet.getInt("idPeriodo");
                 
-             // Obtener la fecha de la columna "fechaConRecargo" como objeto java.sql.Timestamp
+                // Obtener la fecha de la columna "fechaConRecargo" como objeto java.sql.Timestamp
                 java.sql.Timestamp fechaRecargo = resultSet.getTimestamp("fechaConRecargo");
                 
-             // Convertir java.sql.Timestamp a java.util.Date
+                // Convertir java.sql.Timestamp a java.util.Date
                 Date fechaRecargoUtil = new Date(fechaRecargo.getTime());
                 
                 // Formatear la fecha al formato "dd/MM/yyyy"
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                 fechaConRecargo = dateFormat.format(fechaRecargoUtil);
-                
-//                fechaConRecargo = resultSet.getString("fechaConRecargo");
-                
-
+                            
                 // Mostramos los valores por consola
                 System.out.println("Query 3 - IDlocal: " + idLocales + "  idPeriodo: " + idPeriodos +  " fechaConRecargo: " + fechaConRecargo);
             }
