@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.sql.Timestamp;
+
 public class bdaquamovil {
 
     public static void main(String[] args) {
@@ -20,9 +24,13 @@ public class bdaquamovil {
             	//Llamamos a los metodos
             	consultarRazonSocial(connection, 100);
                 
-                consultarPeriodoFechaPago(connection, 100, 202304);
+            	consultarNombrePeriodo(connection, 100, 202304);
+            	
+            	consultarFechaConRecargo(connection, 100, 202304);
                 
                 consultarTelefonoCelular(connection, 100);
+                
+                
 
                 // Se cierra la conexión a la base de datos
                 connection.close();
@@ -65,8 +73,17 @@ public class bdaquamovil {
 		return razonSocial;
     }
     
-                                        // EXTRAER ULTIMO PERIODO Y FECHA DE PAGO DEL LOCAL 
-    	public static void consultarPeriodoFechaPago(Connection connection, int idLocal, int idPeriodo ) throws SQLException{
+    
+    
+    
+    
+    
+                                        // EXTRAER NOMBRE PERIODO
+    	public static String consultarNombrePeriodo(Connection connection, int idLocal, int idPeriodo ) throws SQLException{
+    		
+    		
+    		String nombrePeriodo = "";
+    		
     		
     		// Ejecutamos una consulta parametrizada. Los signos de interrogación (?) se utilizan como marcadores de posición para los parámetros.
             String queryPeriodoFechaPago = "SELECT * FROM tblDctosPeriodo WHERE idLocal = ? AND idPeriodo = ?";
@@ -85,17 +102,83 @@ public class bdaquamovil {
                 // Utilizamos los métodos getInt() y getString() del ResultSet para obtener los valores de cada columna en el registro actual
                 int idLocales = resultSet.getInt("IDLOCAL");
                 int idPeriodos = resultSet.getInt("idPeriodo");
-                String nombrePeriodo = resultSet.getString("nombrePeriodo");
-                String fechaConRecargo = resultSet.getString("fechaConRecargo");
+                nombrePeriodo = resultSet.getString("nombrePeriodo");
+                
 
                 // Mostramos los valores por consola
-                System.out.println("Query 2 - IDlocal: " + idLocales + "  idPeriodo: " + idPeriodos + " nombrePeriodo: " + nombrePeriodo + " fechaConRecargo: " + fechaConRecargo);
+                System.out.println("Query 2 - IDlocal: " + idLocales + "  idPeriodo: " + idPeriodos + " nombrePeriodo: " + nombrePeriodo );
             }
 
             // Cerramos los recursos utilizados para la consulta
             resultSet.close();
             statement.close();
+            
+            return nombrePeriodo;
+            
     	}
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    												//EXTRER FECHA CON RECARGO
+    		public static String consultarFechaConRecargo(Connection connection, int idLocal, int idPeriodo ) throws SQLException{
+    		
+    		
+    		String fechaConRecargo = "";
+    		
+    		
+    		// Ejecutamos una consulta parametrizada. Los signos de interrogación (?) se utilizan como marcadores de posición para los parámetros.
+            String queryPeriodoFechaPago = "SELECT * FROM tblDctosPeriodo WHERE idLocal = ? AND idPeriodo = ?";
+            PreparedStatement statement = connection.prepareStatement(queryPeriodoFechaPago);
+            
+         // Asignamos los valores de los parámetros en la consulta
+            statement.setInt(1, idLocal);
+            statement.setInt(2, idPeriodo);
+            
+         // Se ejecuta la consulta utilizando el método executeQuery() del objeto PreparedStatement y se guarda el resultado en el objeto ResultSet.
+            ResultSet resultSet = statement.executeQuery();
+            
+         // Recorremos los resultados de la consulta usando el método next() para recorrer fila por fila los registros obtenidos en la consulta
+            while (resultSet.next()) {
+            	
+                // Utilizamos los métodos getInt() y getString() del ResultSet para obtener los valores de cada columna en el registro actual
+                int idLocales = resultSet.getInt("IDLOCAL");
+                int idPeriodos = resultSet.getInt("idPeriodo");
+                
+             // Obtener la fecha de la columna "fechaConRecargo" como objeto java.sql.Timestamp
+                java.sql.Timestamp fechaRecargo = resultSet.getTimestamp("fechaConRecargo");
+                
+             // Convertir java.sql.Timestamp a java.util.Date
+                Date fechaRecargoUtil = new Date(fechaRecargo.getTime());
+                
+                // Formatear la fecha al formato "dd/MM/yyyy"
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                fechaConRecargo = dateFormat.format(fechaRecargoUtil);
+                
+//                fechaConRecargo = resultSet.getString("fechaConRecargo");
+                
+
+                // Mostramos los valores por consola
+                System.out.println("Query 3 - IDlocal: " + idLocales + "  idPeriodo: " + idPeriodos +  " fechaConRecargo: " + fechaConRecargo);
+            }
+
+            // Cerramos los recursos utilizados para la consulta
+            resultSet.close();
+            statement.close();
+            
+            return fechaConRecargo;
+            
+    	}
+    		
+    		
+    		
+    		
+    	
+    	
     	
     	                                            // EXTRAER NÚMEROS DE TELEFONO CELULAR
     	
@@ -124,7 +207,7 @@ public class bdaquamovil {
                 //Le asignamos el prefijo 57 a cada numero para que posteriormente pueda se usado en el IF de validacion de formato de numero celular (12 números)
                 String numeroCelularConPrefijo = "57" + telefonoCelular;
                 // Mostramos los valores por consola
-                System.out.println("Query 3 - IDlocal: " + idLocales + "  telefonoCelular: " + numeroCelularConPrefijo );
+                System.out.println("Query 4 - IDlocal: " + idLocales + "  telefonoCelular: " + numeroCelularConPrefijo );
                 
                 numerosCelular.add(String.valueOf(numeroCelularConPrefijo));
             }

@@ -30,25 +30,63 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+		
+		
 		//Obtenemos la conexion a la base de datos dbaquamovil
-	     Connection connection =  conexionSQLaquamovil.getConexionAquamovil();
+	     Connection connectionAquamovil =  conexionSQLaquamovil.getConexionAquamovil();
 	     
 	     String[] numerosCelular =null;
-//	     String razonSocial= "";
+	     String razonSocial= "";
+	     String nombrePeriodo = "";
+	     String fechaConRecargo = "";
 	     
 	        try {
-	            numerosCelular = bdaquamovil.consultarTelefonoCelular(connection, 100);
-//	            razonSocial = bdaquamovil.consultarRazonSocial(connection, 100);
+	            numerosCelular = bdaquamovil.consultarTelefonoCelular(connectionAquamovil, 100);
+	            razonSocial = bdaquamovil.consultarRazonSocial(connectionAquamovil, 100);
+	            nombrePeriodo = bdaquamovil.consultarNombrePeriodo(connectionAquamovil, 100, 202304);
+	           fechaConRecargo =  bdaquamovil.consultarFechaConRecargo(connectionAquamovil, 100, 202304);
 
+	           
+	           
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        } finally {
 	            try {
-	                connection.close();
+	            	connectionAquamovil.close();
 	            } catch (SQLException e) {
 	                e.printStackTrace();
 	            }
 	        }
+	     
+	  
+	        
+	        
+	        
+	        
+	      //Obtenemos la conexion a la base de datos DBMailmarketing
+		     Connection connectionMailMarketing =  conexionSQLMailMarketing.getConexionMailMarketing();
+		     
+		    String textoSMS= "";
+		    
+		        try {
+		        	
+		        	textoSMS = BDMailMarketing.consultarTextoSMS(connectionMailMarketing, 100);
+		        	
+		        	// Reemplazamos lo parametros del texto
+		        	textoSMS = textoSMS.replaceFirst("xxx", razonSocial)
+		        						.replaceFirst("xxx", nombrePeriodo)
+		        	                    .replaceFirst("xxx", fechaConRecargo);
+		            
+
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        } finally {
+		            try {
+		            	connectionMailMarketing.close();
+		            } catch (SQLException e) {
+		                e.printStackTrace();
+		            }
+		        }
 		
 		
 		// Se fija el tiempo máximo de espera para conectar con el servidor (5000)
@@ -162,7 +200,8 @@ public class Main {
     		parametersList.add(new BasicNameValuePair("login", "noe.herrera@mobile-tic.com"));
     		parametersList.add(new BasicNameValuePair("passwd", "M7Tc9pXbZh3d"));
             parametersList.add(new BasicNameValuePair("dest", numerosCelular[i]));
-            parametersList.add(new BasicNameValuePair("msg", "Mensaje de prueba DB"));
+//            parametersList.add(new BasicNameValuePair("msg", "Mensaje de prueba DB" + razonSocial));
+            parametersList.add(new BasicNameValuePair("msg", textoSMS));
             
             
             try {

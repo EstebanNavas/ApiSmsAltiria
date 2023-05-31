@@ -67,6 +67,9 @@ public class BDMailMarketing {
         return textoSMS;
     }
     
+    
+    
+    
                                                  // EXTRAEMOS LA FECHA Y HORA QUE ESTÁ PROGRAMADO EL ENVIO DEL SMS
     
     public static String consultarFechayHora(Connection connection, int idLocal)throws SQLException  {
