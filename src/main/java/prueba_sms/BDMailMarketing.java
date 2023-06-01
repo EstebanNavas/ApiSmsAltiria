@@ -4,31 +4,57 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;    //pool de conexiones jdbc
+import java.sql.Statement;    
+import java.sql.Timestamp;
 
 public class BDMailMarketing {
+	
     public static void main(String[] args) {
         // Obtenemos la conexión a la base de datos
+    	
+    	
+    	int xIdLocal = 100;
+    	
+    	
         Connection connection = conexionSQLMailMarketing.getConexionMailMarketing();
 
         // Verificamos si la conexión es exitosa o no
         if (connection != null) {
             try {
                 // Llamamos al método consultarTextoSMS
-                consultarTextoSMS(connection, 100);
+            	
+                String xTextoSMS = consultarTextoSMS(connection, xIdLocal);
                 
-                consultarFechayHora(connection, 100);
+                String xFechaHora  = consultarFechayHora(connection, xIdLocal);
+                
+                
+                // crear array numeros celulares
+                // for (   LOOP 
+                
+                //*** enviar mensaje "1-UN" mensaje 
+                
+                int xIdMaximoReporte = obtenerMaximoReporte(connection);
+                
+                
+                //ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte)
+                
+                // )
+                
+                ingresaReporte(connection, xIdLocal, xIdMaximoReporte);
+
+
                 
                 
                 // Se cierra la conexión a la base de datos
                 connection.close();
+                
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
 
-                                             // EXTRAEMOS LA RAZON SOCIAL DEL LOCAL
+                                             // EXTRAEMOS EL MENSAJE DE TEXTO 
     public static String consultarTextoSMS(Connection connection, int idLocal) throws SQLException {
         String textoSMS = "";
 
@@ -105,12 +131,97 @@ public class BDMailMarketing {
         // Cerramos los recursos utilizados
         resultSet.close();
         statement.close();
-        connection.close();
+        //connection.close();
 
         // Retornamos el texto del SMS
         
 		return fechayHora;
     }
+    
+    
+    								//OBTENEMOS EL REPORTE MÁXIMO DE IDREPORTE
+	public static int obtenerMaximoReporte(Connection connection) throws SQLException{
+		
+		int maxIdReporte = 0;
+		
+		//Se define la consulta SQL para obtener el máximo valor de idReporte de la tabla tblMailMarketingReporte
+		String queryObtenerMaxIdReporte = "SELECT MAX (idReporte) AS maxIdReporte FROM tblMailMarketingReporte";
+		
+		PreparedStatement statement = connection.prepareStatement(queryObtenerMaxIdReporte);
+        ResultSet resultSet = statement.executeQuery();
+        
+        //se obtiene el valor de maxIdReporte del resultado utilizando el método getInt() del objeto ResultSet
+        if (resultSet.next()) {
+            maxIdReporte = resultSet.getInt("maxIdReporte");
+        }
+        
+        //Cerramos para librar los recursos
+        resultSet.close();
+        statement.close();
+        
+        System.out.println("maxIdReporte: " + maxIdReporte);
+        
+		return maxIdReporte;
+		
+	}    
+    
+    public static boolean ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte)throws SQLException  {
+    	
+    	String insertStr =  " INSERT INTO tblMailMarketingReporte "
+    			+ "            (IDLOCAL               "// 1
+    			+ "            ,sistema               "// 2  			
+    			+ "            ,idCampaign            "// 3
+    			+ "            ,idPlantilla           "// 4
+    			+ "            ,idDcto                "// 5
+    			+ "            ,idRequerimiento       "// 6
+    			+ "            ,documentoTercero      "// 7
+    			+ "            ,estado                "// 8
+    			+ "            ,descripcion           "// 9
+    			+ "            ,fechaHoraEvento       "// 10
+    			+ "            ,exception             "// 11
+    			+ "            ,email                 "// 12
+    			+ "            ,celular)              "// 13
+    			+ "  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+    	
+    	                       
+    	String xSistema = "aquamovil"; 	
+    	int xidCampaign = 0;
+    	int xidPlantilla = 0;
+    	int xidDcto = 0;									
+    	int xidRequerimiento = 1;						
+    	int xestado = 1;
+    	String xdescripcion = "Envio SMS";
+    	Timestamp xfechaHoraEvento = new Timestamp(System.currentTimeMillis()); 
+    	String xexception = "";
+    	String xemail = "";
+    	String xcelular = "";
+    	
+
+        
+         PreparedStatement statement = connection.prepareStatement(insertStr);
+        	
+         statement.setInt(1, xIdLocal);
+         statement.setString(2, xSistema);
+         statement.setInt(3, xidCampaign);
+         statement.setInt(4, xidPlantilla);
+         statement.setInt(5, xidDcto);
+         statement.setInt(6, xidRequerimiento);
+         statement.setString(7, xcelular);
+         statement.setInt(8, xestado);
+         statement.setString(9, xdescripcion);
+         statement.setTimestamp(10, xfechaHoraEvento);
+         statement.setString(11, xexception);
+         statement.setString(12, xemail);
+         statement.setString(13, xcelular);
+            
+            
+         statement.executeUpdate();
+            
+
+            return true;
+    
+}
+
 }
 
 
@@ -118,8 +229,20 @@ public class BDMailMarketing {
 
 
 
-
-
+// 1
+// 2
+// 3
+// 4
+// 5
+// 6
+// 7
+// 8
+// 9
+// 10
+// 11
+// 12
+// 13
+// 14
 
 
 

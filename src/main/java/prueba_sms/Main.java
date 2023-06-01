@@ -188,6 +188,8 @@ public class Main {
         	String numero = numerosCelular[i]; // En la variable numero guardamos cada número del array para validar posteriormente con el if.
             String regex = "^[0-9]{12}$";  // en la variable regex le especificamos el formato que debe de tener.
             
+            // CONSULTAR EL MAXIMOREPORTE
+            
             // Validamos si el formato de cada número cumple o no con el requisito de (12 numeros continuos sin letras).
             if (!Pattern.matches(regex, numero)) {
                 System.out.println("Error: El número telefónico '" + numero + "' no cumple con el formato adecuado.");
@@ -233,6 +235,8 @@ public class Main {
     					System.out.println(resp);
     					System.out.println("Código de error de Altiria. Compruebe las especificaciones");
     				} else
+    					
+    					// OK   ( consultar maximo + insertar bd )   ================
     					System.out.println(resp);
     			}
     		} catch (Exception e) {

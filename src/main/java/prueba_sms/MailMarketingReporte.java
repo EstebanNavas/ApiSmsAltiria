@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.sql.Timestamp;
 
 public class MailMarketingReporte {
 	
@@ -36,15 +38,18 @@ public class MailMarketingReporte {
 		
 		int maxIdReporte = 0;
 		
+		//Se define la consulta SQL para obtener el máximo valor de idReporte de la tabla tblMailMarketingReporte
 		String queryObtenerMaxIdReporte = "SELECT MAX (idReporte) AS maxIdReporte FROM tblMailMarketingReporte";
 		
 		PreparedStatement statement = connection.prepareStatement(queryObtenerMaxIdReporte);
         ResultSet resultSet = statement.executeQuery();
         
+        //se obtiene el valor de maxIdReporte del resultado utilizando el método getInt() del objeto ResultSet
         if (resultSet.next()) {
             maxIdReporte = resultSet.getInt("maxIdReporte");
         }
         
+        //Cerramos para librar los recursos
         resultSet.close();
         statement.close();
         
@@ -53,6 +58,40 @@ public class MailMarketingReporte {
 		return maxIdReporte;
 		
 	}
+	
+								// GENERAMOS LOS REGISTROS A INSERTAR
+	public static ArrayList<Object[]> generarRegistros(int maxIdReporte){
+		ArrayList<Object[]> registros = new ArrayList();
+		
+        
+        // Creamos un objeto java.sql.Timestamp para obtener la fecha y hora del sistema
+//        Timestamp fechaHoraEvento = new Timestamp(System.currentTimeMillis());
+        
+     // Obtenemos los valores correspondientes a cada campo
+        int IDLOCAL = 0; 
+        int sistema = 0; 
+        int idCampaign = 0; 
+        int idPlantilla = 0; 
+        int idDcto = 0; 
+        int idRequerimiento = 1; 
+        String documentoTercero = "celular"; 
+        int estado = 1; 
+        String descripcion = "Envio SMS";
+        Timestamp fechaHoraEvento = new Timestamp(System.currentTimeMillis()); 
+        String exception = ""; 
+        String email = ""; 
+        String celular = "celular"; 
+
+
+        // Agregamos un nuevo objeto ArrayList con los valores de cada campo a insertar
+        Object[] registro = { IDLOCAL, sistema, maxIdReporte, idCampaign, idPlantilla, idDcto, idRequerimiento,
+                documentoTercero, estado, descripcion, fechaHoraEvento, exception, email, celular };
+        registros.add(registro);
+		
+		
+		return registros;
+	}
+	
 		
 	}//FIN DE LA CLASE
 

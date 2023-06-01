@@ -16,19 +16,24 @@ public class bdaquamovil {
     public static void main(String[] args) {
         // Obtenemos la conexión a la base de datos
         Connection connection = conexionSQLaquamovil.getConexionAquamovil();
+        
+        
+        int xIdLocal = 100;
+        int xIdPeriodo=202304;
+               
 
         // Verificamos si la conexión es exitosa o no
         if (connection != null) {
             try {
             	
             	//Llamamos a los metodos
-            	consultarRazonSocial(connection, 100);
+            	consultarRazonSocial(connection, xIdLocal);
                 
-            	consultarNombrePeriodo(connection, 100, 202304);
+            	consultarNombrePeriodo(connection, xIdLocal, xIdPeriodo);
             	
-            	consultarFechaConRecargo(connection, 100, 202304);
+            	consultarFechaConRecargo(connection, xIdLocal, xIdPeriodo);
                 
-                consultarTelefonoCelular(connection, 100);
+                consultarTelefonoCelular(connection, xIdLocal);
                 
                 
 
