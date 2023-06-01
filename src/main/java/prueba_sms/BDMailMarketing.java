@@ -14,6 +14,7 @@ public class BDMailMarketing {
     	
     	
     	int xIdLocal = 100;
+    	String[] xnumerosCelular =null;
     	
     	
     	
@@ -29,21 +30,15 @@ public class BDMailMarketing {
                 String xFechaHora  = consultarFechayHora(connection, xIdLocal);
                 
                 
-                // crear array numeros celulares
-                // for (   LOOP 
-                
-                //*** enviar mensaje "1-UN" mensaje 
+             
                 
                 int xIdMaximoReporte = obtenerMaximoReporte(connection);
                 int xidCampaign = consultarIdCampaign(connection, xIdLocal);
                 int xIdPlantilla = consultarIdPlantilla(connection, xIdLocal);
                 
+         
                 
-                //ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte)
-                
-                // )
-                
-                ingresaReporte(connection, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla);
+                ingresaReporte(connection, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla, xnumerosCelular);
 
 
                 
@@ -55,6 +50,34 @@ public class BDMailMarketing {
                 e.printStackTrace();
             }
         }
+        
+    	//Obtenemos la conexion a la base de datos dbaquamovil
+	     Connection connectionAquamovil =  conexionSQLaquamovil.getConexionAquamovil();
+	     
+	     
+//	     String razonSocial= "";
+//	     String nombrePeriodo = "";
+//	     String fechaConRecargo = "";
+	     
+	        try {
+	        	xnumerosCelular = bdaquamovil.consultarTelefonoCelular(connectionAquamovil, xIdLocal);
+//	            razonSocial = bdaquamovil.consultarRazonSocial(connectionAquamovil, xIdLocal);
+//	            nombrePeriodo = bdaquamovil.consultarNombrePeriodo(connectionAquamovil, xIdLocal, 202304);
+//	           fechaConRecargo =  bdaquamovil.consultarFechaConRecargo(connectionAquamovil, xIdLocal, 202304);
+	           
+	           
+	           
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	            	connectionAquamovil.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+        
+        
     }
 
                                              // EXTRAEMOS EL MENSAJE DE TEXTO 
@@ -253,7 +276,7 @@ public class BDMailMarketing {
 	
 	
     											// GENERAMOS EL INSERT A LA TABLA TBLMAILMARKETINGREPORTE
-    public static boolean ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte, int xidCampaign, int xIdPlantilla)throws SQLException  {
+    public static boolean ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte, int xidCampaign, int xIdPlantilla, String[] xnumerosCelular)throws SQLException  {
     	
     	  // Verificamos si la coenxión está cerrada, si es asi entonces se abre la conexión a la DB
     	if (connection.isClosed()) {
@@ -290,28 +313,29 @@ public class BDMailMarketing {
     	Timestamp xfechaHoraEvento = new Timestamp(System.currentTimeMillis()); 
     	String xexception = "";
     	String xemail = "";
-    	String xcelular = "";
+//    	String xcelular = "";
     	
 
         
          PreparedStatement statement = connection.prepareStatement(insertStr);
         	
-         statement.setInt(1, xIdLocal);
-         statement.setString(2, xSistema);
-         statement.setInt(3, xidCampaign);
-         statement.setInt(4, xIdPlantilla);
-         statement.setInt(5, xidDcto);
-         statement.setInt(6, xidRequerimiento);
-         statement.setString(7, xcelular);
-         statement.setInt(8, xestado);
-         statement.setString(9, xdescripcion);
-         statement.setTimestamp(10, xfechaHoraEvento);
-         statement.setString(11, xexception);
-         statement.setString(12, xemail);
-         statement.setString(13, xcelular);
-            
-            
-         statement.executeUpdate();
+         for (String xcelular : xnumerosCelular) {
+             statement.setInt(1, xIdLocal);
+             statement.setString(2, xSistema);
+             statement.setInt(3, xidCampaign);
+             statement.setInt(4, xIdPlantilla);
+             statement.setInt(5, xidDcto);
+             statement.setInt(6, xidRequerimiento);
+             statement.setString(7, xcelular);
+             statement.setInt(8, xestado);
+             statement.setString(9, xdescripcion);
+             statement.setTimestamp(10, xfechaHoraEvento);
+             statement.setString(11, xexception);
+             statement.setString(12, xemail);
+             statement.setString(13, xcelular);
+
+             statement.executeUpdate();
+         }
             
 
             return true;

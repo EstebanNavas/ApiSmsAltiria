@@ -87,7 +87,7 @@ public class Main {
 	                               .replaceFirst("xxx", fechaConRecargo);
 
 	            if (!connectionMailMarketing.isClosed()) {
-	                BDMailMarketing.ingresaReporte(connectionMailMarketing, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla);
+	                BDMailMarketing.ingresaReporte(connectionMailMarketing, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla, numerosCelular);
 	            } else {
 	                System.out.println("Error: La conexión a la base de datos está cerrada");
 	            }
@@ -260,12 +260,12 @@ public class Main {
     					System.out.println("Mensaje enviado exitosamente " + resp);
     				
     				System.out.println("El máximo reporte es de: " + xIdMaximoReporte);
-//    				BDMailMarketing.obtenerMaximoReporte(connectionMailMarketing);
     				
-    				BDMailMarketing.ingresaReporte(connectionMailMarketing, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla);
+    				// llamamos al metodo ingresaReporte para ingresar los datos a la tabla tblMailMarketingReporte
+    				BDMailMarketing.ingresaReporte(connectionMailMarketing, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla, numerosCelular);
     				
     				System.out.println("El máximo reporte despues del envio de los SMS es de: " + xIdMaximoReporte);
-    				
+    				xIdMaximoReporte++;
     			}
     		} catch (Exception e) {
     			System.out.println("Excepción");
@@ -285,7 +285,10 @@ public class Main {
             
         }  //Fin del FOR
 	
-        System.out.println("Registros guardados exitosamente ");
+//        System.out.println("Registros guardados exitosamente ");
+//        BDMailMarketing.ingresaReporte(connectionMailMarketing, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla, numerosCelular);
+//		
+//		System.out.println("El máximo reporte despues del envio de los SMS es de: " + xIdMaximoReporte);
 		
-	}
-}
+	}//FIN DEL MAIN
+}// FIN DE LA CLASE MAIN
