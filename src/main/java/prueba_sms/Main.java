@@ -45,7 +45,7 @@ public class Main {
 	            razonSocial = bdaquamovil.consultarRazonSocial(connectionAquamovil, 100);
 	            nombrePeriodo = bdaquamovil.consultarNombrePeriodo(connectionAquamovil, 100, 202304);
 	           fechaConRecargo =  bdaquamovil.consultarFechaConRecargo(connectionAquamovil, 100, 202304);
-
+	           
 	           
 	           
 	        } catch (SQLException e) {
@@ -58,35 +58,56 @@ public class Main {
 	            }
 	        }
 	     
+	        
+	        
+	        // Obtenemos la conexión a la base de datos DBMailmarketing
 	  
+	        Connection connectionMailMarketing = null;
 	        
-	        
-	        
-	        
-	      //Obtenemos la conexion a la base de datos DBMailmarketing
-		     Connection connectionMailMarketing =  conexionSQLMailMarketing.getConexionMailMarketing();
-		     
-		    String textoSMS= "";
-		    
-		        try {
-		        	
-		        	textoSMS = BDMailMarketing.consultarTextoSMS(connectionMailMarketing, 100);
-		        	
-		        	// Reemplazamos lo parametros del texto
-		        	textoSMS = textoSMS.replaceFirst("xxx", razonSocial)
-		        						.replaceFirst("xxx", nombrePeriodo)
-		        	                    .replaceFirst("xxx", fechaConRecargo);
-		            
+	        String textoSMS= "";
+	        int xIdLocal = 100;
+		    int xidCampaign = 0;
+		    int xIdPlantilla = 0;
+		    int xIdMaximoReporte = 0;
 
-		        } catch (SQLException e) {
-		            e.printStackTrace();
-		        } finally {
-		            try {
-		            	connectionMailMarketing.close();
-		            } catch (SQLException e) {
-		                e.printStackTrace();
-		            }
-		        }
+		    try {
+	            // Obtenemos la conexión a la base de datos DBMailmarketing
+	            connectionMailMarketing = conexionSQLMailMarketing.getConexionMailMarketing();
+
+	            // Resto del código...
+
+	            textoSMS = BDMailMarketing.consultarTextoSMS(connectionMailMarketing, 100);
+	            xidCampaign = BDMailMarketing.consultarIdCampaign(connectionMailMarketing, xIdLocal);
+	            xIdPlantilla = BDMailMarketing.consultarIdPlantilla(connectionMailMarketing, xIdLocal);
+	            xIdMaximoReporte = BDMailMarketing.obtenerMaximoReporte(connectionMailMarketing);
+
+	            // Reemplazamos los parámetros del texto
+	            textoSMS = textoSMS.replaceFirst("xxx", razonSocial)
+	                               .replaceFirst("xxx", nombrePeriodo)
+	                               .replaceFirst("xxx", fechaConRecargo);
+
+	            if (!connectionMailMarketing.isClosed()) {
+	                BDMailMarketing.ingresaReporte(connectionMailMarketing, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla);
+	            } else {
+	                System.out.println("Error: La conexión a la base de datos está cerrada");
+	            }
+	        } catch (SQLException e) {
+	            System.out.println("Excepción al establecer la conexión con la base de datos");
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                if (connectionMailMarketing != null && !connectionMailMarketing.isClosed()) {
+	                    connectionMailMarketing.close();
+	                }
+	            } catch (SQLException e) {
+	                System.out.println("Excepción al cerrar la conexión con la base de datos");
+	                e.printStackTrace();
+	            }
+	        }
+	        
+	        
+	        
+	  
 		
 		
 		// Se fija el tiempo máximo de espera para conectar con el servidor (5000)
@@ -235,9 +256,16 @@ public class Main {
     					System.out.println(resp);
     					System.out.println("Código de error de Altiria. Compruebe las especificaciones");
     				} else
-    					
-    					// OK   ( consultar maximo + insertar bd )   ================
-    					System.out.println(resp);
+    					// Se muestra por consolola el envío éxitoso del SMS
+    					System.out.println("Mensaje enviado exitosamente " + resp);
+    				
+    				System.out.println("El máximo reporte es de: " + xIdMaximoReporte);
+//    				BDMailMarketing.obtenerMaximoReporte(connectionMailMarketing);
+    				
+    				BDMailMarketing.ingresaReporte(connectionMailMarketing, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla);
+    				
+    				System.out.println("El máximo reporte despues del envio de los SMS es de: " + xIdMaximoReporte);
+    				
     			}
     		} catch (Exception e) {
     			System.out.println("Excepción");
@@ -257,7 +285,7 @@ public class Main {
             
         }  //Fin del FOR
 	
-
+        System.out.println("Registros guardados exitosamente ");
 		
 	}
 }

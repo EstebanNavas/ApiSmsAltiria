@@ -16,6 +16,7 @@ public class BDMailMarketing {
     	int xIdLocal = 100;
     	
     	
+    	
         Connection connection = conexionSQLMailMarketing.getConexionMailMarketing();
 
         // Verificamos si la conexión es exitosa o no
@@ -34,13 +35,15 @@ public class BDMailMarketing {
                 //*** enviar mensaje "1-UN" mensaje 
                 
                 int xIdMaximoReporte = obtenerMaximoReporte(connection);
+                int xidCampaign = consultarIdCampaign(connection, xIdLocal);
+                int xIdPlantilla = consultarIdPlantilla(connection, xIdLocal);
                 
                 
                 //ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte)
                 
                 // )
                 
-                ingresaReporte(connection, xIdLocal, xIdMaximoReporte);
+                ingresaReporte(connection, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla);
 
 
                 
@@ -131,12 +134,94 @@ public class BDMailMarketing {
         // Cerramos los recursos utilizados
         resultSet.close();
         statement.close();
-        //connection.close();
+        
 
         // Retornamos el texto del SMS
         
 		return fechayHora;
     }
+    
+    
+    
+      								// EXTRAEMOS IDCAMPAÑA
+    public static int consultarIdCampaign(Connection connection, int idLocal) throws SQLException {
+        int idCampaign = 0;
+
+        // Ejecutamos una consulta parametrizada
+        String queryTextoSMS = "SELECT * FROM tblMailCampaign WHERE idlocal = ? AND sistema = ? AND idCampaign = ?";
+        PreparedStatement statement = connection.prepareStatement(queryTextoSMS);
+
+        // Asignamos los valores de los parámetros en la consulta
+        statement.setInt(1, 100); // idlocal
+        statement.setString(2, "aquamovil"); // sistema
+        statement.setInt(3, 18); // idCampaign
+
+        // Ejecutamos la consulta y obtenemos el resultado
+        ResultSet resultSet = statement.executeQuery();
+
+        // Recorremos los resultados de la consulta
+        while (resultSet.next()) {
+;
+            idCampaign = resultSet.getInt("idCampaign");
+            
+
+            // Mostramos los valores por consola
+            System.out.println("idCampaign: " + idCampaign);
+        }
+
+        // Cerramos los recursos utilizados
+        resultSet.close();
+        statement.close();
+        
+
+        // Retornamos el Id de la campaña
+        return idCampaign;
+    }
+    
+    
+    
+    								//EXTRAEMOS EL ID DE PLANTILLA
+    public static int consultarIdPlantilla(Connection connection, int idLocal) throws SQLException {
+        int idPlantilla = 0;
+
+        // Ejecutamos una consulta parametrizada
+        String queryTextoSMS = "SELECT * FROM tblMailCampaign WHERE idlocal = ? AND sistema = ? AND idCampaign = ?";
+        PreparedStatement statement = connection.prepareStatement(queryTextoSMS);
+
+        // Asignamos los valores de los parámetros en la consulta
+        statement.setInt(1, 100); // idlocal
+        statement.setString(2, "aquamovil"); // sistema
+        statement.setInt(3, 18); // idCampaign
+
+        // Ejecutamos la consulta y obtenemos el resultado
+        ResultSet resultSet = statement.executeQuery();
+
+        // Recorremos los resultados de la consulta
+        while (resultSet.next()) {
+ 
+        	idPlantilla = resultSet.getInt("idPlantilla");
+            
+
+            // Mostramos los valores por consola
+            System.out.println("idPlantilla: " + idPlantilla);
+        }
+
+        // Cerramos los recursos utilizados
+        resultSet.close();
+        statement.close();
+        
+
+        // Retornamos el Id de la plantilla
+        return idPlantilla;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     								//OBTENEMOS EL REPORTE MÁXIMO DE IDREPORTE
@@ -164,8 +249,19 @@ public class BDMailMarketing {
 		return maxIdReporte;
 		
 	}    
+	
+	
+	
+    											// GENERAMOS EL INSERT A LA TABLA TBLMAILMARKETINGREPORTE
+    public static boolean ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte, int xidCampaign, int xIdPlantilla)throws SQLException  {
+    	
+    	  // Verificamos si la coenxión está cerrada, si es asi entonces se abre la conexión a la DB
+    	if (connection.isClosed()) {
+            // Si la conexión está cerrada, la abrimos nuevamente
+            connection = conexionSQLMailMarketing.getConexionMailMarketing();
+        }
+    	
     
-    public static boolean ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte)throws SQLException  {
     	
     	String insertStr =  " INSERT INTO tblMailMarketingReporte "
     			+ "            (IDLOCAL               "// 1
@@ -185,8 +281,8 @@ public class BDMailMarketing {
     	
     	                       
     	String xSistema = "aquamovil"; 	
-    	int xidCampaign = 0;
-    	int xidPlantilla = 0;
+//    	int xidCampaign = 0;
+//    	int xidPlantilla = 0;
     	int xidDcto = 0;									
     	int xidRequerimiento = 1;						
     	int xestado = 1;
@@ -203,7 +299,7 @@ public class BDMailMarketing {
          statement.setInt(1, xIdLocal);
          statement.setString(2, xSistema);
          statement.setInt(3, xidCampaign);
-         statement.setInt(4, xidPlantilla);
+         statement.setInt(4, xIdPlantilla);
          statement.setInt(5, xidDcto);
          statement.setInt(6, xidRequerimiento);
          statement.setString(7, xcelular);
