@@ -14,7 +14,7 @@ public class BDMailMarketing {
     	
     	
     	int xIdLocal = 100;
-    	String[] xnumerosCelular =null;
+    	String xnumerosCelular =null;
     	
     	
     	
@@ -53,20 +53,12 @@ public class BDMailMarketing {
         
     	//Obtenemos la conexion a la base de datos dbaquamovil
 	     Connection connectionAquamovil =  conexionSQLaquamovil.getConexionAquamovil();
-	     
-	     
-//	     String razonSocial= "";
-//	     String nombrePeriodo = "";
-//	     String fechaConRecargo = "";
+	    
 	     
 	        try {
-	        	xnumerosCelular = bdaquamovil.consultarTelefonoCelular(connectionAquamovil, xIdLocal);
-//	            razonSocial = bdaquamovil.consultarRazonSocial(connectionAquamovil, xIdLocal);
-//	            nombrePeriodo = bdaquamovil.consultarNombrePeriodo(connectionAquamovil, xIdLocal, 202304);
-//	           fechaConRecargo =  bdaquamovil.consultarFechaConRecargo(connectionAquamovil, xIdLocal, 202304);
-	           
-	           
-	           
+	        	String[] xnumerosCelular1 = bdaquamovil.consultarTelefonoCelular(connectionAquamovil, xIdLocal);
+
+	                 
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        } finally {
@@ -276,7 +268,7 @@ public class BDMailMarketing {
 	
 	
     											// GENERAMOS EL INSERT A LA TABLA TBLMAILMARKETINGREPORTE
-    public static boolean ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte, int xidCampaign, int xIdPlantilla, String[] xnumerosCelular)throws SQLException  {
+    public static boolean ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte, int xidCampaign, int xIdPlantilla, String xnumerosCelular)throws SQLException  {
     	
     	  // Verificamos si la coenxión está cerrada, si es asi entonces se abre la conexión a la DB
     	if (connection.isClosed()) {
@@ -304,8 +296,6 @@ public class BDMailMarketing {
     	
     	                       
     	String xSistema = "aquamovil"; 	
-//    	int xidCampaign = 0;
-//    	int xidPlantilla = 0;
     	int xidDcto = 0;									
     	int xidRequerimiento = 1;						
     	int xestado = 1;
@@ -313,29 +303,29 @@ public class BDMailMarketing {
     	Timestamp xfechaHoraEvento = new Timestamp(System.currentTimeMillis()); 
     	String xexception = "";
     	String xemail = "";
-//    	String xcelular = "";
+
     	
 
         
          PreparedStatement statement = connection.prepareStatement(insertStr);
         	
-         for (String xcelular : xnumerosCelular) {
+       
              statement.setInt(1, xIdLocal);
              statement.setString(2, xSistema);
              statement.setInt(3, xidCampaign);
              statement.setInt(4, xIdPlantilla);
              statement.setInt(5, xidDcto);
              statement.setInt(6, xidRequerimiento);
-             statement.setString(7, xcelular);
+             statement.setString(7, xnumerosCelular);
              statement.setInt(8, xestado);
              statement.setString(9, xdescripcion);
              statement.setTimestamp(10, xfechaHoraEvento);
              statement.setString(11, xexception);
              statement.setString(12, xemail);
-             statement.setString(13, xcelular);
+             statement.setString(13, xnumerosCelular);
 
              statement.executeUpdate();
-         }
+       
             
 
             return true;
