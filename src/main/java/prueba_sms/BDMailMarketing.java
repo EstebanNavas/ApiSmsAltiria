@@ -38,7 +38,7 @@ public class BDMailMarketing {
                 
          
                 
-                ingresaReporte(connection, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla, xnumerosCelular);
+                ingresaReporte(connection, xIdLocal, xIdMaximoReporte, xidCampaign, xIdPlantilla, xnumerosCelular, xTextoSMS);
 
 
                 
@@ -268,7 +268,7 @@ public class BDMailMarketing {
 	
 	
     											// GENERAMOS EL INSERT A LA TABLA TBLMAILMARKETINGREPORTE
-    public static boolean ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte, int xidCampaign, int xIdPlantilla, String xnumerosCelular)throws SQLException  {
+    public static boolean ingresaReporte(Connection connection, int xIdLocal, int xIdMaximoReporte, int xidCampaign, int xIdPlantilla, String xnumerosCelular, String xTextoSMS)throws SQLException  {
     	
     	  // Verificamos si la coenxión está cerrada, si es asi entonces se abre la conexión a la DB
     	if (connection.isClosed()) {
@@ -299,7 +299,7 @@ public class BDMailMarketing {
     	int xidDcto = 0;									
     	int xidRequerimiento = 1;						
     	int xestado = 1;
-    	String xdescripcion = "Envio SMS";
+//    	String xdescripcion = "Envio SMS";
     	Timestamp xfechaHoraEvento = new Timestamp(System.currentTimeMillis()); 
     	String xexception = "";
     	String xemail = "";
@@ -318,7 +318,7 @@ public class BDMailMarketing {
              statement.setInt(6, xidRequerimiento);
              statement.setString(7, xnumerosCelular);
              statement.setInt(8, xestado);
-             statement.setString(9, xdescripcion);
+             statement.setString(9, xTextoSMS);
              statement.setTimestamp(10, xfechaHoraEvento);
              statement.setString(11, xexception);
              statement.setString(12, xemail);

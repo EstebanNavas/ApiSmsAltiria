@@ -43,7 +43,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		 // Declaramos e inicializamos las variables locales xIdLocal y xIdPeriodo
-		 int xIdLocal = 100;
+		 int xIdLocal = 101;
 		 int xIdPeriodo = 202304;
 		
 		//Obtenemos la conexion a la base de datos dbaquamovil
@@ -131,7 +131,8 @@ public class Main {
 					try {
 					
 					BDMailMarketing.ingresaReporte(connectionMailMarketing, xIdLocal, xIdMaximoReporte, xidCampaign,
-							xIdPlantilla, xNumerosCelularArr[i]);
+							xIdPlantilla, xNumerosCelularArr[i], textoSMS)
+					;
 					
 					}catch(SQLException e) {// Capturamos en el catch alguna excepción que pueda ocurrir al guardar el registro en la DB
 						System.out.println("Excepción al guardar el registro en la DB");
