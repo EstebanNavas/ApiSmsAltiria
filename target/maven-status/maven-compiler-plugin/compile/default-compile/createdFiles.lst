@@ -1,1 +1,7 @@
+prueba_sms\conexionSQLMailMarketing.class
+prueba_sms\conexionSQLaquamovil.class
+prueba_sms\MailMarketingReporte.class
+prueba_sms\BDMailMarketing.class
 prueba_sms\Main.class
+prueba_sms\bdaquamovil.class
+prueba_sms\sms_conURL.class

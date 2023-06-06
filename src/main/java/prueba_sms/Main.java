@@ -43,8 +43,12 @@ public class Main {
 	public static void main(String[] args) {
 		
 		 // Declaramos e inicializamos las variables locales xIdLocal y xIdPeriodo
-		 int xIdLocal = 101;
-		 int xIdPeriodo = 202304;
+		
+		int xIdLocal = new Integer(args[0]).intValue();
+		int xIdPeriodo = new Integer(args[1]).intValue();	
+		
+//		 int xIdLocal = 101;
+//		 int xIdPeriodo = 202304;
 		
 		//Obtenemos la conexion a la base de datos dbaquamovil
 	     Connection connectionAquamovil =  conexionSQLaquamovil.getConexionAquamovil();
