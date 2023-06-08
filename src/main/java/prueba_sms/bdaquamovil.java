@@ -188,7 +188,7 @@ public class bdaquamovil {
     	public static String[] consultarTelefonoCelular(Connection connection, int idLocal) throws SQLException{
     		
     		// Ejecutamos una consulta parametrizada. Los signos de interrogación (?) se utilizan como marcadores de posición para los parámetros.
-            String queryTelefonoCelular = "SELECT * FROM tblTerceros WHERE idLocal = ? AND ISNUMERIC([telefonoCelular]) = 1 AND LEN([telefonoCelular]) = 10";
+            String queryTelefonoCelular = "SELECT * FROM tblTerceros WHERE idLocal = ? AND ISNUMERIC([telefonoCelular]) = 1 AND LEN([telefonoCelular]) = 10 AND [telefonoCelular] NOT LIKE '%.%' ";
             PreparedStatement statement = connection.prepareStatement(queryTelefonoCelular);
             
          // Asignamos los valores de los parámetros en la consulta
