@@ -8,7 +8,7 @@ public class conexionSQLMailMarketing {
 	
 	public static Connection getConexionMailMarketing() {
 		
-		String conexionUrl = "jdbc:sqlserver://localhost:1434;"
+		String conexionUrl = "jdbc:sqlserver://localhost:1433;"
 				+ "database=BDMailMarketing;"
 				+ "user=sa;"
 				+ "password=0424;"

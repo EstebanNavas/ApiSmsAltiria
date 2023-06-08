@@ -8,7 +8,7 @@ public class conexionSQLaquamovil {
 	
 public static Connection getConexionAquamovil() {
 		
-		String conexionUrl = "jdbc:sqlserver://localhost:1434;"
+		String conexionUrl = "jdbc:sqlserver://localhost:1433;"
 				+ "database=bdaquamovil;"
 				+ "user=sa;"
 				+ "password=0424;"
