@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -118,6 +119,21 @@ public class Main {
 	            textoSMS = textoSMS.replaceFirst("xxx", razonSocial)
 	                               .replaceFirst("xxx", nombrePeriodo)
 	                               .replaceFirst("xxx", fechaConRecargo);
+	            
+	            // Se cambian los "/" por "-" para que pueda tener un formato valido a la hora de verificar la fecha 
+	            fechaConRecargo = fechaConRecargo.replace("/", "-");
+	            
+	            // Obtenemos la fecha actual
+	            LocalDate fechaActual = LocalDate.now();
+	            
+	            // Obtenemos la fechaConRecargo como LocalDate
+	            LocalDate fechaRecargo = LocalDate.parse(fechaConRecargo);
+	            
+	            // Validamos si la fechaRecargo es menor a la fecha actual 
+	            if(fechaRecargo.isBefore(fechaActual)) {
+	            	System.out.println("Fecha con recargo es menor a la fecha actual: " + fechaConRecargo);
+	            	return;
+	            }
 	             
 	            
 	            
