@@ -34,18 +34,21 @@ public class Main {
 	   } 	 
 
 
-	public static void main(String[] args) {
-		
-		// Cremos  una instancia de la clase  AppThread
-        AppThread appThread = new AppThread();
+		public static void main(String[] args) {
+			
+			 int xIdLocal = Integer.parseInt(args[0]);
+			 int xIdPeriodo = Integer.parseInt(args[1]);
+			    
+			// Creamos una instancia de la clase AppThread y utilizamos los argumentos xIdLocal y xIdPeriodo para inicializar las variables
+			AppThread appThread = new AppThread(xIdLocal, xIdPeriodo);
 
-        // Creamos un objeto Thread y le pasamos la instancia de AppThread
-        Thread hilo = new Thread(appThread);
+			// Creamos un objeto Thread y le pasamos la instancia de AppThread
+			Thread hilo = new Thread(appThread);
 
-        // Iniciamos la ejecución del hilo
-        hilo.start();
-        
-	}
+			// Iniciamos la ejecución del hilo
+			hilo.start();
+
+		}
 	
     // MÉTODO PARA ENVIAR EL SMS 
 	public  void EnviaSms(String xNumeroCelular, String xTextoSMS) {

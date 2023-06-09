@@ -8,8 +8,20 @@ import java.time.LocalDate;
 
 public class AppThread implements Runnable {
 	
+    private int xIdLocal;
+    private int xIdPeriodo;
+    
+    
+    // Creamos un cosntructor de la clase AppThread y le pasamos como parametros las varibales xIdLocal y xIdPeriodo
+    public AppThread(int xIdLocal, int xIdPeriodo) {
+        this.xIdLocal = xIdLocal;
+        this.xIdPeriodo = xIdPeriodo;
+    }
+	
 
 	public void run() {
+		
+		
 		
 		
 		 // Declaramos e inicializamos las variables locales xIdLocal y xIdPeriodo
@@ -17,8 +29,8 @@ public class AppThread implements Runnable {
 //			int xIdLocal = new Integer(args[0]).intValue();
 //			int xIdPeriodo = new Integer(args[1]).intValue();	
 		
-			 int xIdLocal = 101;
-			 int xIdPeriodo = 202304;
+//			 int xIdLocal = 101;
+//			 int xIdPeriodo = 202304;
 			
 			//Obtenemos la conexion a la base de datos dbaquamovil
 		     Connection connectionAquamovil =  conexionSQLaquamovil.getConexionAquamovil();
